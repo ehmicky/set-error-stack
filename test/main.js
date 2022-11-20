@@ -2,6 +2,10 @@ import test from 'ava'
 import setErrorStack from 'set-error-stack'
 import { each } from 'test-each'
 
+const setNewStack = function (error, prefix = '') {
+  setErrorStack(error, error.stack.replace('Error: one', `${prefix}Error: two`))
+}
+
 each([null, true, undefined], ({ title }, stack) => {
   test(`Validate stack | ${title}`, (t) => {
     t.throws(setErrorStack.bind(undefined, new Error('one'), stack))
@@ -28,7 +32,7 @@ test('Sets error stack', (t) => {
 
 test('Sets error message', (t) => {
   const error = new Error('one')
-  setErrorStack(error, error.stack.replace('one', 'two'))
+  setNewStack(error)
   t.is(error.message, 'two')
   t.false(Object.getOwnPropertyDescriptor(error, 'message').enumerable)
 })
@@ -43,31 +47,32 @@ test('Does not set error message if the stack has not changed', (t) => {
 test('Does not set error message if the old stack does not contain it', (t) => {
   const error = new Error('one')
   error.message = 'other'
-  setErrorStack(error, error.stack.replace('one', 'two'))
+  setNewStack(error)
   t.is(error.message, 'other')
 })
 
 test('Does not set error message if the old stack is invalid', (t) => {
   const error = new Error('one')
   error.stack = error.message
-  setErrorStack(error, error.stack.replace('one', 'two'))
+  setNewStack(error)
   t.is(error.message, 'one')
 })
 
 test('Sets error message even if stack includes message but does not start with it', (t) => {
   const error = new Error('one')
-  setErrorStack(error, `prefix\n${error.stack.replace('one', 'two')}`)
+  setNewStack(error, 'prefix\n')
   t.is(error.message, 'two')
 })
 
 test('Does not set error message if stack includes message but does not start with it without a newline', (t) => {
   const error = new Error('one')
-  setErrorStack(error, `prefix: ${error.stack.replace('one', 'two')}`)
+  setNewStack(error, 'prefix: ')
   t.is(error.message, 'one')
 })
 
 test('Does not set error message if the stack is missing a V8 first line', (t) => {
   const error = new Error('one')
+  error.stack = 'Error:'
   setErrorStack(error, error.stack.replace('Error: one', 'two'))
   t.is(error.message, 'one')
 })
