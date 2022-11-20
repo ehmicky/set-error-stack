@@ -1,7 +1,13 @@
-import setErrorStack, { Options } from 'set-error-stack'
-import { expectType, expectAssignable } from 'tsd'
+import { expectType, expectError } from 'tsd'
 
-expectType<object>(setErrorStack(true))
+import setErrorStack from 'set-error-stack'
 
-setErrorStack(true, {})
-expectAssignable<Options>({})
+const error = new Error('test')
+expectType<Error>(setErrorStack(error, ''))
+
+expectError(setErrorStack(error))
+expectError(setErrorStack(error, true))
+expectError(setErrorStack(error, '', ''))
+
+expectType<Error>(setErrorStack(null, ''))
+expectType<true>(setErrorStack(error as Error & { prop: true }, '').prop)

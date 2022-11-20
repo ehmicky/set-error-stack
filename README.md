@@ -8,14 +8,41 @@
 
 Properly update an error's stack.
 
-Work in progress!
+In V8 (Chrome, Node.js, Deno, etc.),
+[`error.stack`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/stack)
+includes
+[`error.message`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/message).
+However, if `error.stack` is modified, `error.message` is not updated
+accordingly. This library fixes it.
 
-# Features
+On other JavaScript engines, this library just sets `error.stack`.
 
 # Example
 
+Without `set-error-stack`:
+
+```js
+const error = new Error('one')
+console.log(error.stack) // 'Error: one ...'
+console.log(error.message) // 'one'
+
+error.stack = error.stack.replace('one', 'two')
+console.log(error.stack) // 'Error: two ...'
+console.log(error.message) // 'one'
+```
+
+With `set-error-stack`:
+
 ```js
 import setErrorStack from 'set-error-stack'
+
+const error = new Error('one')
+console.log(error.stack) // 'Error: one ...'
+console.log(error.message) // 'one'
+
+setErrorStack(stack, error.stack.replace('one', 'two'))
+console.log(error.stack) // 'Error: two ...'
+console.log(error.message) // 'two'
 ```
 
 # Install
@@ -30,30 +57,47 @@ It is an ES module and must be loaded using
 [an `import` or `import()` statement](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c),
 not `require()`.
 
-<!--
-This package works in Node.js >=14.18.0. It is an ES module and must be loaded
-using
-[an `import` or `import()` statement](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c),
-not `require()`.
--->
-
 # API
 
-## setErrorStack(value, options?)
+## setErrorStack(error, stack)
 
-`value` `any`\
-`options` [`Options?`](#options)\
-_Return value_: [`object`](#return-value)
+`error` `Error | any`\
+`stack` `string`\
+_Return value_: `Error`
 
-### Options
+Sets `error.stack = stack`. If needed, also modifies `error.message`
+accordingly.
 
-Object with the following properties.
-
-### Return value
-
-Object with the following properties.
+Returns `error`. If `error` is not an `Error` instance, it is converted to one.
 
 # Related projects
+
+- [`modern-errors`](https://github.com/ehmicky/modern-errors): Handle errors
+  like it's 2022 🔮
+- [`error-custom-class`](https://github.com/ehmicky/error-custom-class): Create
+  one error class
+- [`error-class-utils`](https://github.com/ehmicky/error-class-utils): Utilities
+  to properly create error classes
+- [`error-serializer`](https://github.com/ehmicky/error-serializer): Convert
+  errors to/from plain objects
+- [`normalize-exception`](https://github.com/ehmicky/normalize-exception):
+  Normalize exceptions/errors
+- [`is-error-instance`](https://github.com/ehmicky/is-error-instance): Check if
+  a value is an `Error` instance
+- [`merge-error-cause`](https://github.com/ehmicky/merge-error-cause): Merge an
+  error with its `cause`
+- [`set-error-class`](https://github.com/ehmicky/set-error-class): Properly
+  update an error's class
+- [`set-error-message`](https://github.com/ehmicky/set-error-message): Properly
+  update an error's message
+- [`set-error-props`](https://github.com/ehmicky/set-error-props): Properly
+  update an error's properties
+- [`error-cause-polyfill`](https://github.com/ehmicky/error-cause-polyfill):
+  Polyfill `error.cause`
+- [`handle-cli-error`](https://github.com/ehmicky/handle-cli-error): 💣 Error
+  handler for CLI applications 💥
+- [`log-process-errors`](https://github.com/ehmicky/log-process-errors): Show
+  some ❤ to Node.js process errors
 
 # Support
 
