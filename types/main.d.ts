@@ -1,24 +1,21 @@
 type NormalizeError<ErrorArg> = ErrorArg extends Error ? ErrorArg : Error
 
 /**
- * Sets `error.message = newMessage`.
+ * Sets `error.stack = stack`.
+ * If needed, also modifies `error.message` accordingly.
  *
- * Returns `error`. If `error` is not an `Error` in
- * stance, it is converted to one.
- *
- * If `error.stack` contains `currentMessage`, it is replaced by `newMessage`.
- * `currentMessage` is the error message currently included in `error.stack`. It
- * defaults to `error.message`, which is usually best.
+ * Returns `error`. If `error` is not an `Error` instance, it is converted to
+ * one.
  *
  * @example
  * ```js
  * const error = new Error('one')
- * console.log(error.message) // 'one'
  * console.log(error.stack) // 'Error: one ...'
+ * console.log(error.message) // 'one'
  *
- * setErrorStack(error, 'two')
- * console.log(error.message) // 'two'
+ * setErrorStack(error, error.stack.replace('one', 'two'))
  * console.log(error.stack) // 'Error: two ...'
+ * console.log(error.message) // 'two'
  * ```
  */
 export default function setErrorStack<ErrorArg>(
