@@ -15,7 +15,7 @@ includes
 However, if `error.stack` is modified, `error.message` is not updated
 accordingly. This library fixes it.
 
-On other JavaScript engines, this library just sets `error.stack`.
+In other JavaScript engines, this library just sets `error.stack`.
 
 # Example
 
@@ -40,7 +40,7 @@ const error = new Error('one')
 console.log(error.stack) // 'Error: one ...'
 console.log(error.message) // 'one'
 
-setErrorStack(stack, error.stack.replace('one', 'two'))
+setErrorStack(error, error.stack.replace('one', 'two'))
 console.log(error.stack) // 'Error: two ...'
 console.log(error.message) // 'two'
 ```
