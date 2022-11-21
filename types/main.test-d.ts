@@ -1,7 +1,7 @@
-import templateName, { Options } from 'template-name'
+import setErrorStack, { Options } from 'set-error-stack'
 import { expectType, expectAssignable } from 'tsd'
 
-expectType<object>(templateName(true))
+expectType<object>(setErrorStack(true))
 
-templateName(true, {})
+setErrorStack(true, {})
 expectAssignable<Options>({})
