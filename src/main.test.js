@@ -1,7 +1,7 @@
 import test from 'ava'
+import setErrorStack from 'set-error-stack'
 import { each } from 'test-each'
 
-import setErrorStack from 'set-error-stack'
 
 const setNewStack = (error, prefix = '') => {
   setErrorStack(error, error.stack.replace('Error: one', `${prefix}Error: two`))
