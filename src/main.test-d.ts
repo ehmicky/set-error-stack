@@ -1,5 +1,6 @@
-import setErrorStack from 'set-error-stack'
 import { expectType } from 'tsd'
+
+import setErrorStack from 'set-error-stack'
 
 const error = new Error('test')
 expectType<Error>(setErrorStack(error, ''))
