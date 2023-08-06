@@ -42,7 +42,10 @@
   ],
   "license": "MIT",
   "homepage": "https://www.github.com/ehmicky/set-error-stack",
-  "repository": "ehmicky/set-error-stack",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ehmicky/set-error-stack.git"
+  },
   "bugs": {
     "url": "https://github.com/ehmicky/set-error-stack/issues"
   },
