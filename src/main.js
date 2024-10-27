@@ -65,7 +65,6 @@ const getStartIndex = (stack, name) => {
 }
 
 const setNonEnumProp = (error, propName, value) => {
-  // eslint-disable-next-line fp/no-mutating-methods
   Object.defineProperty(error, propName, {
     value,
     enumerable: false,
